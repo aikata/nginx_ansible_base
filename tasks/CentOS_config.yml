@@ -77,3 +77,28 @@
 
 - name: Grant Nginx access to static contents
   command: "chcon -Rt httpd_sys_content_t /var/data"
+
+- name: get status of systemd controlled processes
+  service_facts:
+  register: services_state
+
+- name: copy firewalld service definition file to target
+  copy:
+    src: firewalld-nginx-service-definition.xml
+    dest: /etc/firewalld/services/nginx.xml
+    owner: root
+    group: root
+    mode: '0640'
+  when: services_state.ansible_facts.services['firewalld.service'] is defined and services_state.ansible_facts.services['firewalld.service'].state == "running"
+
+- name: add service definition to firewalld
+  command: firewall-cmd --reload
+  when: services_state.ansible_facts.services['firewalld.service'] is defined and services_state.ansible_facts.services['firewalld.service'].state == "running"
+
+- name: open firewalld ports for nginx if firewalld is running
+  firewalld:
+    service: nginx
+    permanent: yes
+    immediate: yes
+    state: enabled
+  when: services_state.ansible_facts.services['firewalld.service'] is defined and services_state.ansible_facts.services['firewalld.service'].state == "running"
