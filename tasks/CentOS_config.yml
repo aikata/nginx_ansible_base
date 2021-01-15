@@ -1,0 +1,79 @@
+- name: "Adding custom dir: /var/data and subdirectories"
+  file:
+    name: "{{item}}"
+    owner: jenkins
+    group: jenkins
+    state: directory
+  with_items:
+    - /var/data
+    - /var/data/cache
+    - /var/data/state
+
+- name: Creating /data symlink
+  file:
+    name: /data
+    state: link
+    src: /var/data
+
+- name: Set required selinux booleans so Nginx actually runs
+  seboolean:
+    name: "{{item}}"
+    state: yes
+    persistent: yes
+  with_items:
+    - httpd_can_network_connect
+    - httpd_can_network_relay
+  become: yes
+
+- name: Copy custom nginx config to target(s)
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: nginx
+    group: nginx
+    mode: 0440
+
+- name: create additional nginx/conf.d directory
+  file:
+    path: /etc/nginx/conf.d
+    state: directory
+    mode: 0750
+    owner: nginx
+    group: nginx
+
+- name: create additional systemd directory needed for task below this
+  file:
+    path: /etc/systemd/system/nginx.service.d
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: copy up systemd file which will set LimitNOFILE to 30000
+  copy:
+    src: nginx.systemd.limitnofile
+    dest: /etc/systemd/system/nginx.service.d/nginx.conf
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Set httpd_unified flag on and keep it persistent across reboots
+  seboolean:
+    name: httpd_unified
+    state: yes
+    persistent: yes
+
+- name: Set httpd_setrlimit flag on and keep it persistent across reboots
+  seboolean:
+    name: httpd_setrlimit
+    state: yes
+    persistent: yes
+
+- name: Set httpd_setrlimit flag on and keep it persistent across reboots
+  seboolean:
+    name: httpd_execmem
+    state: yes
+    persistent: yes
+
+- name: Grant Nginx access to static contents
+  command: "chcon -Rt httpd_sys_content_t /var/data"

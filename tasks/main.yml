@@ -1,0 +1,31 @@
+---
+- name: checking for supported distribution
+  fail:
+    msg: unsupported distribution {{ ansible_distribution }} this only supports CentOS...
+  when: ansible_distribution != "CentOS"
+
+- name: install nginx repo
+  include: "{{ ansible_distribution }}_repo.yml"
+
+- name: install nginx and ansible seboolean and dependencies
+  yum:
+    name: "{{ vars[ansible_distribution]['packages'] }}"
+    state: present
+    update_cache: yes
+
+- name: configure nginx
+  include: "{{ ansible_distribution }}_config.yml"
+
+- name: start nginx
+  systemd:
+    name: nginx
+    enabled: yes
+    state: restarted
+
+- name: logrotate config for nginx
+  copy:
+    src: nginx.logrotate
+    dest: /etc/logrotate.d/nginx
+    owner: root
+    group: root
+    mode: 0644

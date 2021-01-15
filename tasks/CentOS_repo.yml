@@ -1,0 +1,12 @@
+- name: install rpm keys for nginx
+  rpm_key:
+    key: https://nginx.org/keys/nginx_signing.key
+    state: present
+
+- name: install nginx repo
+  yum_repository:
+    name: nginx
+    description: NGINX official CentOS 7 repository
+    baseurl: 'https://nginx.org/packages/centos/7/$basearch/'
+    gpgkey: 'https://nginx.org/keys/nginx_signing.key'
+    gpgcheck: yes
