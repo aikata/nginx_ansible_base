@@ -9,7 +9,7 @@
 
 - name: install nginx and ansible seboolean and dependencies
   yum:
-    name: "{{ vars[ansible_distribution]['packages'] }}"
+    name: "{{ lookup(vars[ansible_distribution].['packages']) }}"
     state: present
     update_cache: yes
 
