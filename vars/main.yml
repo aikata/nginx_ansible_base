@@ -1,0 +1,3 @@
+---
+CentOS:
+  packages: ['geoip', 'git', 'libselinux-python', 'libsemanage-python', 'lua-devel', 'openssl', 'openssl-devel', 'unzip', 'wget', 'zip', 'nginx']
