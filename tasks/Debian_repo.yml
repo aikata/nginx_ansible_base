@@ -1,0 +1,23 @@
+---
+- name: uninstall apt keys for nginx
+  apt_key:
+    url: https://nginx.org/keys/nginx_signing.key
+    state: absent
+  when: uninstall_nginx is defined
+
+- name: uninstall nginx repo
+  apt_repository:
+    repo: deb-src https://nginx.org/packages/mainline/debian/
+    codename: "{{ ansible_distribution_release }}"
+    state: absent
+  when: uninstall_nginx is defined
+
+- name: install apt keys for nginx
+  apt_key:
+    url: https://nginx.org/keys/nginx_signing.key
+    state: present
+
+- name: install nginx repo
+  apt_repository:
+    repo: deb-src https://nginx.org/packages/mainline/debian/
+    codename: "{{ ansible_distribution_release }}"

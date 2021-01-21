@@ -13,3 +13,16 @@ CentOS:
       "zip",
       "nginx"
     ]
+Debian:
+  - packages: [
+      "geoip",
+      "git",
+      "apparmor-utils",
+      "lua-devel",
+      "openssl",
+      "openssl-devel",
+      "unzip",
+      "wget",
+      "zip",
+      "nginx"
+    ]

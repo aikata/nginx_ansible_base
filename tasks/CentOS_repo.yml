@@ -1,3 +1,16 @@
+---
+- name: uninstall rpm keys for nginx
+  rpm_key:
+    key: https://nginx.org/keys/nginx_signing.key
+    state: absent
+  when: uninstall_nginx is defined
+
+- name: uninstall nginx repo
+  file:
+    path: /etc/yum.repos.d/nginx.repo
+    state: absent
+  when: uninstall_nginx is defined
+
 - name: install rpm keys for nginx
   rpm_key:
     key: https://nginx.org/keys/nginx_signing.key

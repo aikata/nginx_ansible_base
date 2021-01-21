@@ -1,36 +1,4 @@
 ---
-- name: Disable required selinux booleans for Nginx
-  seboolean:
-    name: "{{item}}"
-    state: no
-    persistent: yes
-  with_items:
-    - httpd_can_network_connect
-    - httpd_can_network_relay
-  become: yes
-  when: uninstall_nginx is defined
-
-- name: Disable httpd_unified flag
-  seboolean:
-    name: httpd_unified
-    state: no
-    persistent: yes
-  when: uninstall_nginx is defined
-
-- name: Disable httpd_setrlimit flag
-  seboolean:
-    name: httpd_setrlimit
-    state: no
-    persistent: yes
-  when: uninstall_nginx is defined
-
-- name: Disable httpd_setrlimit flag
-  seboolean:
-    name: httpd_execmem
-    state: no
-    persistent: yes
-  when: uninstall_nginx is defined
-
 - name: get status of systemd controlled processes
   service_facts:
   register: services_state
@@ -77,16 +45,6 @@
     state: link
     src: /var/data
 
-- name: Set required selinux booleans so Nginx actually runs
-  seboolean:
-    name: "{{item}}"
-    state: yes
-    persistent: yes
-  with_items:
-    - httpd_can_network_connect
-    - httpd_can_network_relay
-  become: yes
-
 - name: Copy custom nginx config to target(s)
   copy:
     src: nginx.conf
@@ -118,27 +76,6 @@
     mode: 0644
     owner: root
     group: root
-
-- name: Set httpd_unified flag on and keep it persistent across reboots
-  seboolean:
-    name: httpd_unified
-    state: yes
-    persistent: yes
-
-- name: Set httpd_setrlimit flag on and keep it persistent across reboots
-  seboolean:
-    name: httpd_setrlimit
-    state: yes
-    persistent: yes
-
-- name: Set httpd_setrlimit flag on and keep it persistent across reboots
-  seboolean:
-    name: httpd_execmem
-    state: yes
-    persistent: yes
-
-- name: Grant Nginx access to static contents
-  command: "chcon -Rt httpd_sys_content_t /var/data"
 
 - name: get status of systemd controlled processes
   service_facts:

@@ -1,0 +1,12 @@
+---
+- name: uninstall nginx and dependencies
+  yum:
+    name: "{{ (lookup('vars', ansible_distribution)).packages }}"
+    state: absent
+  when: uninstall_nginx is defined
+
+- name: install nginx and dependencies
+  yum:
+    name: "{{ (lookup('vars', ansible_distribution)).packages }}"
+    state: present
+    update_cache: yes
