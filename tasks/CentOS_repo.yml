@@ -11,6 +11,11 @@
     state: absent
   when: uninstall_nginx is defined
 
+- name: End play because we finished
+  fail:
+    msg: finished uninstalling nginx repo from {{ ansible_hostname }}
+  when: uninstall_nginx is defined
+
 - name: install rpm keys for nginx
   rpm_key:
     key: https://nginx.org/keys/nginx_signing.key

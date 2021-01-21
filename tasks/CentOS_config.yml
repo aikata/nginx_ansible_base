@@ -60,6 +60,11 @@
     - /var/data
   when: uninstall_nginx is defined
 
+- name: End play because we finished
+  fail:
+    msg: finished uninstalling nginx config from {{ ansible_hostname }}
+  when: uninstall_nginx is defined
+
 - name: "Adding custom dir: /var/data and subdirectories"
   file:
     name: "{{item}}"

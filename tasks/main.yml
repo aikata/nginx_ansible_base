@@ -1,8 +1,8 @@
 ---
 - name: checking for supported distribution
   fail:
-    msg: unsupported distribution {{ ansible_distribution }} this only supports CentOS...
-  when: ansible_distribution != "CentOS"
+    msg: unsupported distribution {{ ansible_distribution }} this only supports CentOS or Debian
+  when: ansible_distribution != "CentOS" or ansible_distribution != "Debian"
 
 - name: install nginx repo
   include: "{{ ansible_distribution }}_repo.yml"
