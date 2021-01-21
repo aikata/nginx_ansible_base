@@ -5,11 +5,6 @@
     state: absent
   when: uninstall_nginx is defined
 
-- name: End play because we finished
-  fail:
-    msg: finished uninstalling nginx packages from {{ ansible_hostname }}
-  when: uninstall_nginx is defined
-
 - name: install nginx and dependencies
   yum:
     name: "{{ CentOS_packages }}"
