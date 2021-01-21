@@ -1,13 +1,13 @@
 ---
 - name: uninstall nginx and dependencies
   apt:
-    name: "{{ Debian.packages }}"
+    name: "{{ Debian_packages }}"
     state: absent
   when: uninstall_nginx is defined
 
 - name: install nginx and dependencies
   apt:
-    name: "{{ Debian.packages }}"
+    name: "{{ Debian_packages }}"
     state: present
     update_cache: yes
 
