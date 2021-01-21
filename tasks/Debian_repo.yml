@@ -22,6 +22,6 @@
     filename: nginx
     repo: "{{item}}"
   with_items:
-    - 'deb https://nginx.org/packages/mainline/debian/ ""{{ ansible_distribution_release }}" nginx'
-    - 'deb-src https://nginx.org/packages/mainline/debian/ "{{ ansible_distribution_release }}" nginx'
+    - 'deb https://nginx.org/packages/mainline/debian/ {{ansible_distribution_release}} nginx'
+    - 'deb-src https://nginx.org/packages/mainline/debian/ {{ansible_distribution_release}} nginx'
   when: uninstall_nginx is not defined
