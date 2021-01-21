@@ -38,12 +38,14 @@
     - /var/data
     - /var/data/cache
     - /var/data/state
+  when: uninstall_nginx is not defined
 
 - name: Creating /data symlink
   file:
     name: /data
     state: link
     src: /var/data
+  when: uninstall_nginx is not defined
 
 - name: Copy custom nginx config to target(s)
   copy:
@@ -52,6 +54,7 @@
     owner: nginx
     group: nginx
     mode: 0440
+  when: uninstall_nginx is not defined
 
 - name: create additional nginx/conf.d directory
   file:
@@ -60,6 +63,7 @@
     mode: 0750
     owner: nginx
     group: nginx
+  when: uninstall_nginx is not defined
 
 - name: create additional systemd directory needed for task below this
   file:
@@ -68,6 +72,7 @@
     mode: 0755
     owner: root
     group: root
+  when: uninstall_nginx is not defined
 
 - name: copy up systemd file which will set LimitNOFILE to 30000
   copy:
@@ -76,10 +81,12 @@
     mode: 0644
     owner: root
     group: root
+  when: uninstall_nginx is not defined
 
 - name: get status of systemd controlled processes
   service_facts:
   register: services_state
+  when: uninstall_nginx is not defined
 
 - name: copy firewalld service definition file to target
   copy:
@@ -88,11 +95,11 @@
     owner: root
     group: root
     mode: '0640'
-  when: services_state.ansible_facts.services['firewalld.service'] is defined and services_state.ansible_facts.services['firewalld.service'].state == "running"
+  when: services_state.ansible_facts.services['firewalld.service'] is defined and services_state.ansible_facts.services['firewalld.service'].state == "running" and uninstall_nginx is not defined
 
 - name: add service definition to firewalld
   command: firewall-cmd --reload
-  when: services_state.ansible_facts.services['firewalld.service'] is defined and services_state.ansible_facts.services['firewalld.service'].state == "running"
+  when: services_state.ansible_facts.services['firewalld.service'] is defined and services_state.ansible_facts.services['firewalld.service'].state == "running" and uninstall_nginx is not defined
 
 - name: open firewalld ports for nginx if firewalld is running
   firewalld:
@@ -100,4 +107,4 @@
     permanent: yes
     immediate: yes
     state: enabled
-  when: services_state.ansible_facts.services['firewalld.service'] is defined and services_state.ansible_facts.services['firewalld.service'].state == "running"
+  when: services_state.ansible_facts.services['firewalld.service'] is defined and services_state.ansible_facts.services['firewalld.service'].state == "running" uninstall_nginx is not defined

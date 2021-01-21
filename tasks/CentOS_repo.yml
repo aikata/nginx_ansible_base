@@ -20,6 +20,7 @@
   rpm_key:
     key: https://nginx.org/keys/nginx_signing.key
     state: present
+  when: uninstall_nginx is not defined
 
 - name: install nginx repo
   yum_repository:
@@ -28,3 +29,4 @@
     baseurl: 'https://nginx.org/packages/centos/7/$basearch/'
     gpgkey: 'https://nginx.org/keys/nginx_signing.key'
     gpgcheck: yes
+  when: uninstall_nginx is not defined

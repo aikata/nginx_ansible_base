@@ -60,11 +60,6 @@
     - /var/data
   when: uninstall_nginx is defined
 
-- name: End play because we finished
-  fail:
-    msg: finished uninstalling nginx config from {{ ansible_hostname }}
-  when: uninstall_nginx is defined
-
 - name: "Adding custom dir: /var/data and subdirectories"
   file:
     name: "{{item}}"
@@ -75,12 +70,14 @@
     - /var/data
     - /var/data/cache
     - /var/data/state
+  when: uninstall_nginx is not defined
 
 - name: Creating /data symlink
   file:
     name: /data
     state: link
     src: /var/data
+  when: uninstall_nginx is not defined
 
 - name: Set required selinux booleans so Nginx actually runs
   seboolean:
@@ -91,6 +88,7 @@
     - httpd_can_network_connect
     - httpd_can_network_relay
   become: yes
+  when: uninstall_nginx is not defined
 
 - name: Copy custom nginx config to target(s)
   copy:
@@ -99,6 +97,7 @@
     owner: nginx
     group: nginx
     mode: 0440
+  when: uninstall_nginx is not defined
 
 - name: create additional nginx/conf.d directory
   file:
@@ -107,6 +106,7 @@
     mode: 0750
     owner: nginx
     group: nginx
+  when: uninstall_nginx is not defined
 
 - name: create additional systemd directory needed for task below this
   file:
@@ -115,6 +115,7 @@
     mode: 0755
     owner: root
     group: root
+  when: uninstall_nginx is not defined
 
 - name: copy up systemd file which will set LimitNOFILE to 30000
   copy:
@@ -123,31 +124,37 @@
     mode: 0644
     owner: root
     group: root
+  when: uninstall_nginx is not defined
 
 - name: Set httpd_unified flag on and keep it persistent across reboots
   seboolean:
     name: httpd_unified
     state: yes
     persistent: yes
+  when: uninstall_nginx is not defined
 
 - name: Set httpd_setrlimit flag on and keep it persistent across reboots
   seboolean:
     name: httpd_setrlimit
     state: yes
     persistent: yes
+  when: uninstall_nginx is not defined
 
 - name: Set httpd_setrlimit flag on and keep it persistent across reboots
   seboolean:
     name: httpd_execmem
     state: yes
     persistent: yes
+  when: uninstall_nginx is not defined
 
 - name: Grant Nginx access to static contents
   command: "chcon -Rt httpd_sys_content_t /var/data"
+  when: uninstall_nginx is not defined
 
 - name: get status of systemd controlled processes
   service_facts:
   register: services_state
+  when: uninstall_nginx is not defined
 
 - name: copy firewalld service definition file to target
   copy:
@@ -156,11 +163,11 @@
     owner: root
     group: root
     mode: '0640'
-  when: services_state.ansible_facts.services['firewalld.service'] is defined and services_state.ansible_facts.services['firewalld.service'].state == "running"
+  when: services_state.ansible_facts.services['firewalld.service'] is defined and services_state.ansible_facts.services['firewalld.service'].state == "running" and uninstall_nginx is not defined
 
 - name: add service definition to firewalld
   command: firewall-cmd --reload
-  when: services_state.ansible_facts.services['firewalld.service'] is defined and services_state.ansible_facts.services['firewalld.service'].state == "running"
+  when: services_state.ansible_facts.services['firewalld.service'] is defined and services_state.ansible_facts.services['firewalld.service'].state == "running" and uninstall_nginx is not defined
 
 - name: open firewalld ports for nginx if firewalld is running
   firewalld:
@@ -168,4 +175,4 @@
     permanent: yes
     immediate: yes
     state: enabled
-  when: services_state.ansible_facts.services['firewalld.service'] is defined and services_state.ansible_facts.services['firewalld.service'].state == "running"
+  when: services_state.ansible_facts.services['firewalld.service'] is defined and services_state.ansible_facts.services['firewalld.service'].state == "running" and uninstall_nginx is not defined

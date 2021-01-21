@@ -10,4 +10,4 @@
     name: "{{ Debian_packages }}"
     state: present
     update_cache: yes
-
+  when: uninstall_nginx is not defined

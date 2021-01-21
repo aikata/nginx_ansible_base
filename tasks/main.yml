@@ -13,6 +13,7 @@
     name: nginx
     enabled: yes
     state: restarted
+  when: uninstall_nginx is not defined
 
 - name: logrotate config for nginx
   copy:
@@ -21,3 +22,4 @@
     owner: root
     group: root
     mode: 0644
+  when: uninstall_nginx is not defined
