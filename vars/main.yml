@@ -1,3 +1,5 @@
 ---
-CentOS_packages: ["geoip", "git", "libselinux-python", "libsemanage-python", "lua-devel", "openssl", "openssl-devel", "unzip", "wget", "zip", "nginx"]
-Debian_packages: ["geoip", "git", "apparmor-utils", "lua-devel", "openssl", "openssl-devel", "unzip", "wget", "zip", "nginx"]
+CentOS_install_packages: ["geoip", "git", "libselinux-python", "libsemanage-python", "lua-devel", "openssl", "openssl-devel", "unzip", "wget", "zip", "nginx"]
+Debian_install_packages: ["apparmor-utils", "geoip", "git", "libselinux-python", "libsemanage-python", "lua-devel", "openssl", "openssl-devel", "unzip", "wget", "zip", "nginx"]
+CentOS_uninstall_packages: ["geoip", "git", "lua-devel", "openssl", "openssl-devel", "unzip", "wget", "zip", "nginx"]
+Debian_uninstall_packages: ["apparmor-utils", "geoip", "git", "lua-devel", "openssl", "openssl-devel", "unzip", "wget", "zip", "nginx"]
