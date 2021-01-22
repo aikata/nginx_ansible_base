@@ -13,6 +13,7 @@
     name: nginx
     enabled: yes
     state: restarted
+    daemon_reload: yes
   when: uninstall_nginx is not defined
 
 - name: logrotate config for nginx
