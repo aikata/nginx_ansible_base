@@ -11,6 +11,12 @@
     state: absent
   when: uninstall_nginx is defined
 
+- name: install pre-req for certificate validation
+  apt:
+    name: ca-certificates
+    state: present
+  when: uninstall_nginx is not defined
+
 - name: install apt keys for nginx
   apt_key:
     url: https://nginx.org/keys/nginx_signing.key
