@@ -107,4 +107,4 @@
     permanent: yes
     immediate: yes
     state: enabled
-  when: services_state.ansible_facts.services['firewalld.service'] is defined and services_state.ansible_facts.services['firewalld.service'].state == "running" uninstall_nginx is not defined
+  when: services_state.ansible_facts.services['firewalld.service'] is defined and services_state.ansible_facts.services['firewalld.service'].state == "running" and uninstall_nginx is not defined
