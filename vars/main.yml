@@ -1,5 +1,5 @@
 ---
 CentOS_install_packages: ["geoip", "git", "libselinux-python", "libsemanage-python", "lua-devel", "openssl", "openssl-devel", "unzip", "wget", "zip", "nginx"]
-Debian_install_packages: ["apparmor-utils", "geoip-bin", "git", "liblua", "openssl", "unzip", "wget", "zip", "nginx"]
+Debian_install_packages: ["apparmor-utils", "geoip-bin", "git", "liblua5.1-0", "liblua5.1-0-dev", "openssl", "unzip", "wget", "zip", "nginx"]
 CentOS_uninstall_packages: ["geoip", "git", "lua-devel", "openssl", "openssl-devel", "unzip", "wget", "zip", "nginx"]
-Debian_uninstall_packages: ["apparmor-utils", "geoip-bin", "git", "liblua", "openssl", "unzip", "wget", "zip", "nginx"]
+Debian_uninstall_packages: ["apparmor-utils", "geoip-bin", "git", "liblua5.1-0", "liblua5.1-0-dev", "openssl", "unzip", "wget", "zip", "nginx"]
